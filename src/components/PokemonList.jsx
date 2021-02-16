@@ -18,13 +18,18 @@ class PokemonList extends Component {
   }
 
   getPokemon() {
-    // https://www.npmjs.com/package/axios#example
-    // FIX_ME
-
+    axios.get('/api/pokemon')
+      .then((data) => {
+        console.log('pokemondata: ', data);
+        this.setState({pokemonList: data.data});
+      })
   }
 
   addCaughtPokemon(caughtPokemon) {
-    // FIX_ME
+    axios.post('/api/pokemon', caughtPokemon)
+      .then((data) => {
+        this.setState({pokemonList: this.state.pokemonList.concat(caughtPokemon)})
+      });
   }
 
   render() {
@@ -33,7 +38,7 @@ class PokemonList extends Component {
       <table>
         <tbody>
           {/** HINT: While the map method below currently uses props, it will need to map over something else when step 3 is completed */}
-          {this.props.pokemonList.map(pokemon => <Pokemon pokemon={pokemon} key={pokemon.id}/>)}
+          {this.state.pokemonList.map(pokemon => <Pokemon pokemon={pokemon} key={pokemon.id}/>)}
         </tbody>
       </table>
       <CatchPokemon addCaughtPokemon={this.addCaughtPokemon} />

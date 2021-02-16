@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
 const path = require("path");
-const PORT = 3001;
+const PORT = 3002;
+const queries = require('./queries.js');
 
 // Tells express to serve our compiled code from the dist folder.
 app.use(express.static(path.join(__dirname, "./dist")));
@@ -10,11 +11,26 @@ app.use(express.static(path.join(__dirname, "./dist")));
 app.use(express.json());
 
 app.get("/api/pokemon", (req, res) => {
-  console.log('get/api/pokemon endpoint hit!');
-  // FIX_ME
+  queries.retrieveAllPokemon((err, data) => {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.json(data);
+    }
+  });
 });
 
 // Write a POST route for the "/api/pokemon" endpoint.
+
+app.post('/api/pokemon', (req, res) => {
+  queries.addNewPokemon(req.body, (err, data) => {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.json(data);
+    }
+  });
+});
 
 
 app.listen(PORT, () => {
